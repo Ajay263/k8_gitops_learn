@@ -39,3 +39,15 @@ YOUR-USERNAME/argocd-demo.git → Ajay263/k8_gitops_learn (your repo)
 ```
 argocd app sync nginx-demo
 ```
+
+
+
+
+
+port forward argocd
+
+```
+
+kubectl port-forward svc/argocd-server -n argocd 8080:443
+
+```
