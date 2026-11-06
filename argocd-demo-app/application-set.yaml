@@ -1,0 +1,34 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: argocd-demo-set
+  namespace: argocd
+spec:
+  generators:
+    - list:
+        elements:
+          - env: dev
+            namespace: dev
+          - env: staging
+            namespace: staging
+          - env: prod
+            namespace: prod
+  template:
+    metadata:
+      name: 'argocd-demo-{{env}}'
+      namespace: argocd
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/Ajay263/k8_gitops_learn
+        targetRevision: HEAD
+        path: argocd-demo-app/argocd-demo/overlays/{{env}}
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: '{{namespace}}'
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
